@@ -20,7 +20,11 @@ pipeline {
                 sshagent(credentials: ["${SSH_CRED}"]) {
                     sh '''
                         echo "Cleaning old files on server..."
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${SERVER_IP} "sudo rm -rf ${WEB_DIR}/*"
+                        ssh -o StrictHostKeyChecking=no ubuntu@172.31.17.62 "
+                        sudo mkdir -p /var/www/html &&
+                        sudo rm -rf /var/www/html/* &&
+                        sudo cp -r /tmp/* /var/www/html/
+                         "
 
                         echo "Uploading new files to /tmp on server..."
                         scp -r index.html css js fonts images ${REMOTE_USER}@${SERVER_IP}:/tmp/
